@@ -1,0 +1,18 @@
+{
+  "prod": {
+    "tourdeguet": {
+      "url": "wss://www.monsite.com/ws"
+    },
+    "sentinelle": {
+      "publicPath": "/dist/"
+    }
+  },
+  "dev": {
+    "tourdeguet": {
+      "url": "ws://localhost:8080"
+    },
+    "sentinelle": {
+      "publicPath": "/dist/"
+    }
+  }
+}

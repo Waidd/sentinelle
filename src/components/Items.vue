@@ -122,4 +122,15 @@
   margin: 1em 0 0 0;
   letter-spacing: 0.15em;
 }
+
+@media only screen and (max-width: 832px) {
+  body {
+    margin: 0;
+  }
+
+  .item {
+    width: 100%;
+    margin: 0 0 0.2em 0;
+  }
+}
 </style>

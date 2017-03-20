@@ -1,7 +1,7 @@
 {
   "prod": {
     "tourdeguet": {
-      "url": "wss://www.monsite.com/ws"
+      "url": "https://www.monsite.com"
     },
     "sentinelle": {
       "publicPath": "/dist/"
@@ -9,7 +9,7 @@
   },
   "dev": {
     "tourdeguet": {
-      "url": "ws://localhost:8080"
+      "url": "http://localhost:8081"
     },
     "sentinelle": {
       "publicPath": "/dist/"

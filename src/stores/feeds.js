@@ -15,6 +15,7 @@ class FeedsStore extends Events {
     this.items = [];
     this.connected = true;
     this.eventSource = null;
+    this.resetItems = false;
   }
 
   start (serverURL) {
@@ -25,7 +26,9 @@ class FeedsStore extends Events {
   connect () {
     this.eventSource = new window.EventSource(`${this.serverURL}/stream/items`);
     this.eventSource.onmessage = (event) => {
-      this._onEntries(JSON.parse(event.data));
+      console.log('incomming message');
+      this._onEntries(JSON.parse(event.data), this.resetItems);
+      this.resetItems = false;
     };
     this.eventSource.onerror = this._onError.bind(this);
     this.eventSource.onopen = this._onOpen.bind(this);
@@ -44,6 +47,7 @@ class FeedsStore extends Events {
     console.log('connection open');
 
     this.connected = true;
+    this.resetItems = true;
     this.emit('connected');
 
     FaviconStore.set(faviconOn);

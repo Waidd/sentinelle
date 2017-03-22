@@ -15,7 +15,6 @@ class FeedsStore extends Events {
     this.items = [];
     this.connected = true;
     this.eventSource = null;
-    this.resetItems = false;
   }
 
   start (serverURL) {
@@ -27,8 +26,7 @@ class FeedsStore extends Events {
     this.eventSource = new window.EventSource(`${this.serverURL}/stream/items`);
     this.eventSource.onmessage = (event) => {
       console.log('incomming message');
-      this._onEntries(JSON.parse(event.data), this.resetItems);
-      this.resetItems = false;
+      this._onEntries(JSON.parse(event.data));
     };
     this.eventSource.onerror = this._onError.bind(this);
     this.eventSource.onopen = this._onOpen.bind(this);
@@ -47,19 +45,22 @@ class FeedsStore extends Events {
     console.log('connection open');
 
     this.connected = true;
-    this.resetItems = true;
     this.emit('connected');
 
     FaviconStore.set(faviconOn);
   }
 
-  _onEntries (items, override = false) {
-    items.forEach((item) => {
+  _onEntries (items) {
+    this.items = items
+    .map((item) => {
       item.date = new Date(item.date);
-    });
-
-    this.items = override ? items : this.items.concat(items);
-    this.items.sort((a, b) => b.date - a.date);
+      return item;
+    })
+    .filter((item) => {
+      return !this.items.find((each) => item.guid === each.guid);
+    })
+    .concat(this.items)
+    .sort((a, b) => b.date - a.date);
 
     if (this.items.length > 100) {
       this.items = this.items.slice(0, 100);

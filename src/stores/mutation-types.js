@@ -1,0 +1,4 @@
+'use strict';
+
+export const RECEIVED_ITEMS = 'RECEIVED_ITEMS';
+export const CONNECTION_STATUS_CHANGED = 'CONNECTION_STATUS_CHANGED';

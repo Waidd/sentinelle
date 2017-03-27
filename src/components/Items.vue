@@ -20,7 +20,7 @@
         'items'
       ]),
       sortedItems () {
-        return this.items.sort((a, b) => b.date - a.date);
+        return this.items.sort((a, b) => b.date - a.date || a.title > b.title);
       }
     }
   };

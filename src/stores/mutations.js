@@ -18,5 +18,9 @@ export default {
     });
 
     state.items.push(...items);
+
+    if (state.items.length > 100) {
+      state.items = state.items.slice(0, 100);
+    }
   }
 };

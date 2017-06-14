@@ -1,4 +1,7 @@
 import Vue from 'vue';
+import VueObserveVisibility from 'vue-observe-visibility/dist/vue-observe-visibility';
+
+Vue.use(VueObserveVisibility);
 
 import App from './App.vue';
 import configuration from './configuration.js';

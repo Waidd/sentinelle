@@ -1,7 +1,7 @@
 <template>
-  <a class="item" :href="value.link" target="_blank">
+  <a class="item" :href="value.link" target="_blank" v-observe-visibility="visibilityChanged">
     <figure class="itemFigure">
-      <div v-bind:class="{'itemImage': true, 'itemBlank': !loadedImage}" v-bind:style="{'background-image': 'url(' + (loadedImage ? loadedImage : blankImage) + ')'}"></div>
+      <div v-bind:class="{'itemImage': true, 'itemBlank': !loadedImage, 'hidden': !isVisible}" v-bind:style="{'background-image': 'url(' + (loadedImage ? loadedImage : blankImage) + ')'}"></div>
       <figcaption class="item__caption">
         <h3 class="itemTitle">{{ value.title }}</h3>
         <p class="itemSubtitle">{{ value.date.toLocaleString() }}</p>
@@ -22,11 +22,9 @@
     data () {
       return {
         loadedImage: null,
-        blankImage: blankImage
+        blankImage: blankImage,
+        isVisible: false
       };
-    },
-    mounted: function () {
-      this.updateImage();
     },
     watch: {
       value: function (newValue) {
@@ -35,6 +33,7 @@
     },
     methods: {
       updateImage: function () {
+        if (!this.isVisible) { return; }
         if (this.value.image && this.value.image !== this.loadedImage) {
           this.loadImage();
         } else if (!this.value.image) {
@@ -52,6 +51,10 @@
           }
         };
         img.src = this.value.image;
+      },
+      visibilityChanged: function (isVisible, entry) {
+        this.isVisible = isVisible;
+        this.updateImage();
       }
     }
   };
@@ -89,6 +92,10 @@
     margin: 0;
     background-position: center;
     background-size: cover;
+  }
+
+  .itemImage.hidden {
+    display: none;
   }
 
   .itemImage:not(.itemBlank) {

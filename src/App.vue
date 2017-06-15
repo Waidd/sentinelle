@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <items></items>
+    <favicon></favicon>
   </div>
 </template>
 
@@ -8,11 +9,13 @@
   'use strict';
 
   import items from './components/Items.vue';
+  import favicon from './components/Favicon.vue';
 
   export default {
     name: 'app',
     components: {
-      items
+      items,
+      favicon
     },
     data () {
       return {

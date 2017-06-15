@@ -26,15 +26,30 @@
       };
     },
     mounted: function () {
-      if (this.value.image) {
-        this.loadImage();
+      this.updateImage();
+    },
+    watch: {
+      value: function (newValue) {
+        this.updateImage();
       }
     },
     methods: {
+      updateImage: function () {
+        if (this.value.image && this.value.image !== this.loadedImage) {
+          this.loadImage();
+        } else if (!this.value.image) {
+          this.setImage(null);
+        }
+      },
+      setImage: function (imageURL) {
+        this.loadedImage = imageURL;
+      },
       loadImage: function () {
         let img = new window.Image();
         img.onload = () => {
-          this.loadedImage = img.src;
+          if (this.value.image === img.src) {
+            this.setImage(img.src);
+          }
         };
         img.src = this.value.image;
       }

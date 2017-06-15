@@ -1,7 +1,7 @@
 {
   "name": "sentinelle",
   "description": "Client for tourdeguet.",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "author": "Thomas Cholley <cholley.t@gmail.com>",
   "scripts": {
     "configure": "cp configuration.json.example configuration.json && $EDITOR configuration.json",
@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "vue": "^2.1.0",
+    "vuex": "^2.2.1",
     "ws": "^2.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
     "babel-loader": "^6.0.0",
     "babel-preset-es2015": "^6.0.0",
+    "babel-preset-stage-2": "^6.22.0",
     "cross-env": "^3.0.0",
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",

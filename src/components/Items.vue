@@ -1,33 +1,26 @@
 <template>
   <div id="items">
-    <item v-for="item in items" :value="item"></item>
+    <item v-for="item in sortedItems" :value="item"></item>
   </div>
 </template>
 
 <script>
   'use strict';
 
-  import FeedsStore from '../stores/feeds';
   import item from './Item.vue';
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'items',
     components: {
       item
     },
-    data () {
-      return {
-        items: FeedsStore.items
-      };
-    },
-    mounted: function () {
-      this.listenFeedsStore();
-    },
-    methods: {
-      listenFeedsStore: function () {
-        FeedsStore.on('update', (items) => {
-          this.items = items;
-        });
+    computed: {
+      ...mapGetters([
+        'items'
+      ]),
+      sortedItems () {
+        return this.items.sort((a, b) => b.date - a.date || a.title > b.title);
       }
     }
   };

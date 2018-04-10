@@ -1,0 +1,25 @@
+pipeline:
+  build:
+    image: node:9
+    commands:
+      - npm i -g npm@5.7.1
+      - npm ci
+      - NODE_ENV=production npm run build
+    when:
+      branch: master
+    secrets: [ TOURDEGUET_URL, PUBLIC_PATH ]
+
+  deploy:
+    image: debian:9-slim
+    commands:
+      - apt-get update -y && apt-get install openssh-client rsync -y
+      - eval $(ssh-agent -s)
+      - mkdir -p ~/.ssh
+      - echo "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+      - echo "$$DEPLOYMENT_SSH" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+      - rsync -av --delete dist static index.html "$$DEPLOYMENT_USER@$$DEPLOYMENT_URL:$$DEPLOYMENT_PATH"
+    when:
+      branch: master
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    secrets: [ DEPLOYMENT_SSH, DEPLOYMENT_USER, DEPLOYMENT_URL, DEPLOYMENT_PATH ]

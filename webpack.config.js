@@ -1,13 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
-const configuration = require('./configuration.json');
+const configuration = require('./configuration.js');
 
 module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
-    filename: 'build.js'
+    publicPath: configuration.sentinelle.publicPath,
+    filename: 'build.js',
   },
   module: {
     rules: [
@@ -15,59 +15,53 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          loaders: {}
-        }
+          loaders: {},
+        },
       }, {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
       }, {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'file-loader',
         options: {
-          name: '[name].[ext]?[hash]'
-        }
-      }
-    ]
+          name: '[name].[ext]?[hash]',
+        },
+      },
+    ],
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.common.js'
-    }
+      vue$: 'vue/dist/vue.common.js',
+    },
   },
   devServer: {
     historyApiFallback: true,
-    noInfo: true
+    noInfo: true,
   },
   performance: {
-    hints: false
+    hints: false,
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': { NODE_ENV: `"${process.env.NODE_ENV}"` },
+      __CONFIGURATION: JSON.stringify(configuration),
+    }),
+  ],
 };
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map';
-  module.exports.output.publicPath = configuration.prod.sentinelle.publicPath;
-  module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      'process.env': { NODE_ENV: '"production"' },
-      '__CONFIGURATION': JSON.stringify(configuration.prod)
-    }),
+  module.exports.plugins = module.exports.plugins.concat([
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       compress: {
-        warnings: false
-      }
+        warnings: false,
+      },
     }),
     new webpack.LoaderOptionsPlugin({
-      minimize: true
-    })
-  ]);
-} else {
-  module.exports.output.publicPath = configuration.dev.sentinelle.publicPath;
-  module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      '__CONFIGURATION': JSON.stringify(configuration.dev)
-    })
+      minimize: true,
+    }),
   ]);
 }

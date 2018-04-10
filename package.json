@@ -1,7 +1,7 @@
 {
   "name": "sentinelle",
   "description": "Client for tourdeguet.",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": "Thomas Cholley <cholley.t@gmail.com>",
   "scripts": {
     "configure": "cp configuration.json.example configuration.json && $EDITOR configuration.json",

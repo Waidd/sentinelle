@@ -1,6 +1,6 @@
 <template>
   <div id="items">
-    <item v-for="item in sortedItems" :value="item"></item>
+    <item v-for="item in sortedItems" :key="item.guid"  :value="item"></item>
   </div>
 </template>
 

@@ -1,22 +1,16 @@
-'use strict';
-
 import * as types from './mutation-types';
 
 export default {
   [types.CONNECTION_STATUS_CHANGED]: (state, status) => {
+    // eslint-disable-next-line no-param-reassign
     state.connected = status;
   },
 
   [types.RECEIVED_ITEMS]: (state, items) => {
-    items = items
-    .map((item) => {
-      item.date = new Date(item.date);
-      return item;
-    })
-    .filter((item) => {
-      return !state.items.find((each) => item.guid === each.guid);
-    });
+    const filteredItems = items
+      .filter(item => !state.items.find(each => item.guid === each.guid))
+      .map(item => ({ ...item, date: new Date(item.date) }));
 
-    state.items.push(...items);
-  }
+    state.items.push(...filteredItems);
+  },
 };

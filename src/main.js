@@ -3,7 +3,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import configuration from './configuration';
 import store from './stores';
-import { start } from './stores/actions';
+import start from './stores/actions';
 
 const app = document.createElement('div');
 app.id = 'app';

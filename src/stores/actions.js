@@ -1,9 +1,7 @@
-'use strict';
-
 import FeedsAPI from '../api/feeds';
 import * as types from './mutation-types';
 
-export const start = ({ commit }, serverURL) => {
+export default ({ commit }, serverURL) => {
   const api = new FeedsAPI(serverURL);
   api.on('connected', () => {
     commit(types.CONNECTION_STATUS_CHANGED, true);

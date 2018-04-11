@@ -1,9 +1,7 @@
-'use strict';
-
 import Events from 'events';
 
 class FeedsAPI extends Events {
-  constructor (serverURL) {
+  constructor(serverURL) {
     super();
 
     this.serverURL = serverURL;
@@ -11,32 +9,30 @@ class FeedsAPI extends Events {
     this.connected = false;
   }
 
-  start () {
+  start() {
     this.eventSource = new window.EventSource(`${this.serverURL}/stream/items`);
-    this.eventSource.onmessage = this._onMessage.bind(this);
-    this.eventSource.onerror = this._onError.bind(this);
-    this.eventSource.onopen = this._onOpen.bind(this);
+    this.eventSource.onmessage = this.onMessage.bind(this);
+    this.eventSource.onerror = this.onError.bind(this);
+    this.eventSource.onopen = this.onOpen.bind(this);
   }
 
-  stop () {
-    // @TODO
-  }
+  // stop() {
+  //   @TODO
+  // }
 
-  _onMessage (event) {
-    console.log('incomming message');
+  onMessage(event) {
+    // console.log('incomming message');
     this.emit('items', JSON.parse(event.data));
   }
 
-  _onError () {
-    console.error('connection lost');
-
+  onError() {
+    // console.error('connection lost');
     this.connected = false;
     this.emit('disconnected');
   }
 
-  _onOpen () {
-    console.log('connection open');
-
+  onOpen() {
+    // console.log('connection open');
     this.connected = true;
     this.emit('connected');
   }

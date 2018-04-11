@@ -1,7 +1,14 @@
 <template>
-  <a class="item" :href="value.link" target="_blank">
+  <a
+    :href="value.link"
+    class="item"
+    target="_blank"
+  >
     <figure class="itemFigure">
-      <div v-bind:class="{'itemImage': true, 'itemBlank': !loadedImage}" v-bind:style="{'background-image': 'url(' + (loadedImage ? loadedImage : blankImage) + ')'}"></div>
+      <div
+        :class="{'itemImage': true, 'itemBlank': !loadedImage}"
+        :style="{'background-image': 'url(' + (loadedImage ? loadedImage : blankImage) + ')'}"
+      />
       <figcaption class="item__caption">
         <h3 class="itemTitle">{{ value.title }}</h3>
         <p class="itemSubtitle">{{ value.date.toLocaleString() }}</p>
@@ -12,49 +19,52 @@
 </template>
 
 <script>
-  'use strict';
+import blankImage from '../assets/blank2.jpg';
 
-  import blankImage from '../assets/blank2.jpg';
-
-  export default {
-    name: 'item',
-    props: ['value'],
-    data () {
-      return {
-        loadedImage: null,
-        blankImage: blankImage
-      };
+export default {
+  name: 'Item',
+  props: {
+    value: {
+      type: Object,
+      required: true,
     },
-    mounted: function () {
+  },
+  data() {
+    return {
+      loadedImage: null,
+      blankImage,
+    };
+  },
+  watch: {
+    value() {
       this.updateImage();
     },
-    watch: {
-      value: function (newValue) {
-        this.updateImage();
+  },
+  mounted() {
+    this.updateImage();
+  },
+  methods: {
+    updateImage() {
+      if (this.value.image && this.value.image !== this.loadedImage) {
+        this.loadImage();
+      } else if (!this.value.image) {
+        this.setImage(null);
       }
     },
-    methods: {
-      updateImage: function () {
-        if (this.value.image && this.value.image !== this.loadedImage) {
-          this.loadImage();
-        } else if (!this.value.image) {
-          this.setImage(null);
+    setImage(imageURL) {
+      this.loadedImage = imageURL;
+    },
+    loadImage() {
+      const img = new window.Image();
+      img.onload = () => {
+        if (this.value.image === img.src) {
+          this.setImage(img.src);
         }
-      },
-      setImage: function (imageURL) {
-        this.loadedImage = imageURL;
-      },
-      loadImage: function () {
-        let img = new window.Image();
-        img.onload = () => {
-          if (this.value.image === img.src) {
-            this.setImage(img.src);
-          }
-        };
-        img.src = this.value.image;
-      }
-    }
-  };
+      };
+      img.src = this.value.image;
+    },
+  },
+};
 </script>
 
 <style>

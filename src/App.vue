@@ -1,28 +1,26 @@
 <template>
   <div id="app">
-    <items></items>
-    <favicon></favicon>
+    <Items />
+    <Favicon />
   </div>
 </template>
 
 <script>
-  'use strict';
+import Items from './components/Items.vue';
+import Favicon from './components/Favicon.vue';
 
-  import items from './components/Items.vue';
-  import favicon from './components/Favicon.vue';
-
-  export default {
-    name: 'app',
-    components: {
-      items,
-      favicon
-    },
-    data () {
-      return {
-        msg: 'Welcome to Your Vue.js App'
-      };
-    }
-  };
+export default {
+  name: 'App',
+  components: {
+    Items,
+    Favicon,
+  },
+  data() {
+    return {
+      msg: 'Welcome to Your Vue.js App',
+    };
+  },
+};
 </script>
 
 <style>

@@ -17,7 +17,7 @@ pipeline:
       - mkdir -p ~/.ssh
       - echo "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
       - echo "$$DEPLOYMENT_SSH" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-      - rsync -av --delete dist static index.html "$$DEPLOYMENT_USER@$$DEPLOYMENT_URL:$$DEPLOYMENT_PATH"
+      - rsync -av --delete dist/* "$$DEPLOYMENT_USER@$$DEPLOYMENT_URL:$$DEPLOYMENT_PATH"
     when:
       branch: master
     volumes:

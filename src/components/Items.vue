@@ -1,27 +1,29 @@
 <template>
   <div id="items">
-    <item v-for="item in sortedItems" :value="item"></item>
+    <Item
+      v-for="item in sortedItems"
+      :key="item.guid"
+      :value="item"
+    />
   </div>
 </template>
 
 <script>
-  'use strict';
+import { mapGetters } from 'vuex';
+import Item from './Item.vue';
 
-  import item from './Item.vue';
-  import { mapGetters } from 'vuex'
-
-  export default {
-    name: 'items',
-    components: {
-      item
+export default {
+  name: 'Items',
+  components: {
+    Item,
+  },
+  computed: {
+    ...mapGetters([
+      'items',
+    ]),
+    sortedItems() {
+      return Array.from(this.items).sort((a, b) => b.date - a.date || a.title > b.title);
     },
-    computed: {
-      ...mapGetters([
-        'items'
-      ]),
-      sortedItems () {
-        return this.items.sort((a, b) => b.date - a.date || a.title > b.title);
-      }
-    }
-  };
+  },
+};
 </script>

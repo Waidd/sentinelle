@@ -1,6 +1,15 @@
 {
   "presets": [
-    ["es2015", { "modules": false }],
-    "stage-2"
-  ]
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+        "useBuiltIns": "usage",
+        "targets": {
+          "browsers": ["last 2 versions"]
+        }
+      }
+    ]
+  ],
+  "plugins": ["@babel/plugin-proposal-object-rest-spread"]
 }

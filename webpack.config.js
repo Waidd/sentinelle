@@ -1,13 +1,27 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const configuration = require('./configuration.js');
 
 module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: configuration.sentinelle.publicPath,
-    filename: 'build.js',
+    publicPath: process.env.PUBLIC_PATH || '/dist/',
+    filename: 'main.sentinelle.js',
+  },
+  mode: process.env.NODE_ENV,
+  devServer: {
+    host: '0.0.0.0',
+    port: process.env.PORT || 5000,
+    disableHostCheck: true,
+  },
+  devtool: 'sourcemap',
+  resolve: {
+    alias: {
+      vue$: 'vue/dist/vue.common.js',
+    },
+    symlinks: false,
   },
   module: {
     rules: [
@@ -15,53 +29,37 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          loaders: {},
+          loaders: {
+            js: {
+              loader: 'babel-loader',
+            },
+          },
         },
       }, {
         test: /\.js$/,
-        loader: 'babel-loader',
         exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+        },
       }, {
         test: /\.(png|jpg|gif|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]?[hash]',
+        use: {
+          loader: 'file-loader',
         },
       },
     ],
   },
-  resolve: {
-    alias: {
-      vue$: 'vue/dist/vue.common.js',
-    },
-  },
-  devServer: {
-    historyApiFallback: true,
-    noInfo: true,
-  },
-  performance: {
-    hints: false,
-  },
-  devtool: '#eval-source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env': { NODE_ENV: `"${process.env.NODE_ENV}"` },
       __CONFIGURATION: JSON.stringify(configuration),
     }),
+    new HtmlWebpackPlugin({
+      title: 'sentinelle',
+      meta: {
+        viewport: 'width=device-width, initial-scale=1',
+      },
+      favicon: path.resolve(__dirname, './src/assets/favicon.png'),
+    }),
   ],
 };
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map';
-  module.exports.plugins = module.exports.plugins.concat([
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false,
-      },
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-    }),
-  ]);
-}
